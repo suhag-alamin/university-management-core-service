@@ -91,31 +91,32 @@ const getSingleFaculty = async (
   return result;
 };
 
-// const updateAcademicFaculty = async (
-//   id: string,
-//   payload: IAcademicFaculty
-// ): Promise<IAcademicFaculty | null> => {
-//   const result = await AcademicFaculty.findOneAndUpdate(
-//     {
-//       _id: id,
-//     },
-//     payload,
-//     {
-//       new: true,
-//     }
-//   );
-//   return result;
-// };
+const updateAcademicFaculty = async (
+  id: string,
+  payload: AcademicFaculty
+): Promise<AcademicFaculty | null> => {
+  const result = await prisma.academicFaculty.update({
+    where: {
+      id,
+    },
+    data: payload,
+  });
 
-// const deleteAcademicFaculty = async (id: string) => {
-//   const result = await AcademicFaculty.findByIdAndDelete(id);
-//   return result;
-// };
+  return result;
+};
+
+const deleteAcademicFaculty = async (id: string) => {
+  const result = await prisma.academicFaculty.delete({
+    where: { id },
+  });
+
+  return result;
+};
 
 export const AcademicFacultyService = {
   createAcademicFaculty,
   getAcademicFaculty,
   getSingleFaculty,
-  // updateAcademicFaculty,
-  // deleteAcademicFaculty,
+  updateAcademicFaculty,
+  deleteAcademicFaculty,
 };

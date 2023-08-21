@@ -20,6 +20,6 @@ router.patch(
   StudentController.updateStudentController
 );
 
-// router.delete('/delete/:id', FacultyController.deleteFaculty);
+router.delete('/:id', StudentController.deleteStudentController);
 
 export const StudentRoutes = router;

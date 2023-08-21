@@ -72,24 +72,24 @@ const updateStudentController = catchAsync(
   }
 );
 
-// const deleteFacultyController = catchAsync(async (req: Request, res: Response) => {
-//   const id = req.params.id;
-//   const result = await FacultyService.deleteFaculty(id);
+const deleteStudentController = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await StudentService.deleteStudent(id);
 
-//   sendResponse<IFaculty>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'faculty deleted successfully !',
-//     data: result,
-
-//   });
-
-// });
+    sendResponse<Student>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Student deleted successfully !',
+      data: result,
+    });
+  }
+);
 
 export const StudentController = {
   createStudentController,
   getAllStudentsController,
   getSingleStudentController,
   updateStudentController,
-  // deleteFaculty,
+  deleteStudentController,
 };

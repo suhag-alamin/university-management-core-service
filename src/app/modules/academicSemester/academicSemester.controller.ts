@@ -37,7 +37,7 @@ const getAllAcademicSemesterController = catchAsync(
     sendResponse<AcademicSemester[]>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Semester retrieved successfully!',
+      message: 'Academic Semester retrieved successfully!',
       meta: result.meta,
       data: result.data,
     });
@@ -53,50 +53,50 @@ const getSingleAcademicSemesterController = catchAsync(
     sendResponse<AcademicSemester>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Semester retrieved successfully!',
+      message: 'Academic Semester retrieved successfully!',
       data: result,
     });
   }
 );
 
-// const updateAcademicSemesterController = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const id = req.params.id;
-//     const updatedData = req.body;
+const updateAcademicSemesterController = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const updatedData = req.body;
 
-//     const result = await AcademicSemesterService.updateAcademicSemester(
-//       id,
-//       updatedData
-//     );
+    const result = await AcademicSemesterService.updateAcademicSemester(
+      id,
+      updatedData
+    );
 
-//     sendResponse<AcademicSemester>(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: 'Semester updated successfully!',
-//       data: result,
-//     });
-//   }
-// );
+    sendResponse<AcademicSemester>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Academic Semester updated successfully!',
+      data: result,
+    });
+  }
+);
 
-// const deleteAcademicSemesterController = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const id = req.params.id;
+const deleteAcademicSemesterController = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
 
-//     const result = await AcademicSemesterService.deleteAcademicSemester(id);
+    const result = await AcademicSemesterService.deleteAcademicSemester(id);
 
-//     sendResponse<AcademicSemester>(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: 'Semester deleted successfully!',
-//       data: result,
-//     });
-//   }
-// );
+    sendResponse<AcademicSemester>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Academic Semester deleted successfully!',
+      data: result,
+    });
+  }
+);
 
 export const AcademicSemesterController = {
   createAcademicSemesterController,
   getAllAcademicSemesterController,
   getSingleAcademicSemesterController,
-  // updateAcademicSemesterController,
-  // deleteAcademicSemesterController,
+  updateAcademicSemesterController,
+  deleteAcademicSemesterController,
 };

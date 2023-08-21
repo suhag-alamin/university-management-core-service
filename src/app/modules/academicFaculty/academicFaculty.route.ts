@@ -33,21 +33,21 @@ router.get(
   AcademicFacultyController.getSingleFacultyController
 );
 
-// router.patch(
-//   '/update/:id',
-//   validateRequest(AcademicFacultyValidation.updateAcademicFacultyZodSchema),
-//   auth(
-//     ENUM_USER_ROLE.SUPER_ADMIN,
-//     ENUM_USER_ROLE.ADMIN,
-//     ENUM_USER_ROLE.FACULTY
-//   ),
-//   AcademicFacultyController.updateAcademicFaculty
-// );
+router.patch(
+  '/:id',
+  validateRequest(AcademicFacultyValidation.updateAcademicFacultyZodSchema),
+  // auth(
+  //   ENUM_USER_ROLE.SUPER_ADMIN,
+  //   ENUM_USER_ROLE.ADMIN,
+  //   ENUM_USER_ROLE.FACULTY
+  // ),
+  AcademicFacultyController.updateFacultyController
+);
 
-// router.delete(
-//   '/delete/:id',
-//   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-//   AcademicFacultyController.deleteAcademicFaculty
-// );
+router.delete(
+  '/:id',
+  // auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  AcademicFacultyController.deleteFacultyController
+);
 
 export const AcademicFacultyRoutes = router;

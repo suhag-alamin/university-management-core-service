@@ -102,22 +102,6 @@ const updateStudent = async (
   id: string,
   payload: Partial<Student>
 ): Promise<Student | null> => {
-  // const isExist = await Faculty.findOne({ id });
-  // if (!isExist) {
-  //   throw new ApiError(httpStatus.NOT_FOUND, 'Faculty not found !');
-  // }
-  // const { name, ...FacultyData } = payload;
-  // const updatedFacultyData: Partial<IFaculty> = { ...FacultyData };
-  // if (name && Object.keys(name).length > 0) {
-  //   Object.keys(name).forEach(key => {
-  //     const nameKey = `name.${key}` as keyof Partial<IFaculty>;
-  //     (updatedFacultyData as any)[nameKey] = name[key as keyof typeof name];
-  //   });
-  // }
-  // const result = await Faculty.findOneAndUpdate({ id }, updatedFacultyData, {
-  //   new: true,
-  // });
-  // return result;
   const result = await prisma.student.update({
     where: {
       id,
@@ -128,39 +112,18 @@ const updateStudent = async (
   return result;
 };
 
-// const deleteFaculty = async (id: string): Promise<IFaculty | null> => {
-//   // check if the faculty is exist
-//   const isExist = await Faculty.findOne({ id });
+const deleteStudent = async (id: string): Promise<Student | null> => {
+  const result = await prisma.student.delete({
+    where: { id },
+  });
 
-//   if (!isExist) {
-//     throw new ApiError(httpStatus.NOT_FOUND, 'Faculty not found !');
-//   }
-
-//   const session = await mongoose.startSession();
-
-//   try {
-//     session.startTransaction();
-//     //delete faculty first
-//     const faculty = await Faculty.findOneAndDelete({ id }, { session });
-//     if (!faculty) {
-//       throw new ApiError(404, 'Failed to delete student');
-//     }
-//     //delete user
-//     await User.deleteOne({ id });
-//     session.commitTransaction();
-//     session.endSession();
-
-//     return faculty;
-//   } catch (error) {
-//     session.abortTransaction();
-//     throw error;
-//   }
-// };
+  return result;
+};
 
 export const StudentService = {
   createStudent,
   getAllStudents,
   getSingleStudent,
   updateStudent,
-  // deleteFaculty,
+  deleteStudent,
 };

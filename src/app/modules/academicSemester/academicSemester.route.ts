@@ -17,15 +17,15 @@ router.get(
   AcademicSemesterController.getSingleAcademicSemesterController
 );
 
-// router.patch(
-//   '/:id',
-//   validateRequest(AcademicSemesterValidation.updateAcademicSemesterZodSchema),
-//   AcademicSemesterController.updateAcademicSemesterController
-// );
+router.patch(
+  '/:id',
+  validateRequest(AcademicSemesterValidation.updateAcademicSemesterZodSchema),
+  AcademicSemesterController.updateAcademicSemesterController
+);
 
-// router.delete(
-//   '/:id',
-//   AcademicSemesterController.deleteAcademicSemesterController
-// );
+router.delete(
+  '/:id',
+  AcademicSemesterController.deleteAcademicSemesterController
+);
 
 export const AcademicSemesterRoutes = router;

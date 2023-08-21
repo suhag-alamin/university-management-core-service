@@ -56,38 +56,40 @@ const getSingleFacultyController = catchAsync(
   }
 );
 
-// const updateFacultyController = catchAsync(async (req: Request, res: Response) => {
-//   const id = req.params.id;
-//   const updatedData = req.body;
-//   const result = await FacultyService.updateFaculty(id, updatedData);
+const updateFacultyController = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const updatedData = req.body;
+    const result = await FacultyService.updateFaculty(id, updatedData);
 
-//   sendResponse<IFaculty>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'faculty updated successfully !',
+    sendResponse<Faculty>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'faculty updated successfully !',
 
-//     data: result,
-//   });
-// });
+      data: result,
+    });
+  }
+);
 
-// const deleteFacultyController = catchAsync(async (req: Request, res: Response) => {
-//   const id = req.params.id;
-//   const result = await FacultyService.deleteFaculty(id);
+const deleteFacultyController = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await FacultyService.deleteFaculty(id);
 
-//   sendResponse<IFaculty>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'faculty deleted successfully !',
-//     data: result,
-
-//   });
-
-// });
+    sendResponse<Faculty>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'faculty deleted successfully !',
+      data: result,
+    });
+  }
+);
 
 export const FacultyController = {
   createFacultyController,
   getAllFacultiesController,
   getSingleFacultyController,
-  // updateFaculty,
-  // deleteFaculty,
+  updateFacultyController,
+  deleteFacultyController,
 };

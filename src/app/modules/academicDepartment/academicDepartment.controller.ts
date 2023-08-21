@@ -61,41 +61,41 @@ const getSingleDepartmentController = catchAsync(
   }
 );
 
-// const updateDepartmentController = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const { id } = req.params;
-//     const result = await AcademicDepartmentService.updateDepartment(
-//       id,
-//       req.body
-//     );
+const updateDepartmentController = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await AcademicDepartmentService.updateAcademicDepartment(
+      id,
+      req.body
+    );
 
-//     sendResponse<AcademicDepartment>(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: 'Academic Department updated successfully',
-//       data: result,
-//     });
-//   }
-// );
+    sendResponse<AcademicDepartment>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Academic Department updated successfully',
+      data: result,
+    });
+  }
+);
 
-// const deleteDepartmentController = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const { id } = req.params;
-//     const result = await AcademicDepartmentService.deleteDepartment(id);
+const deleteDepartmentController = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await AcademicDepartmentService.deleteAcademicDepartment(id);
 
-//     sendResponse<AcademicDepartment>(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: 'Academic Department deleted successfully',
-//       data: result,
-//     });
-//   }
-// );
+    sendResponse<AcademicDepartment>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Academic Department deleted successfully',
+      data: result,
+    });
+  }
+);
 
 export const AcademicDepartmentController = {
   createDepartmentController,
   getAllDepartmentsController,
   getSingleDepartmentController,
-  // updateDepartmentController,
-  // deleteDepartmentController,
+  updateDepartmentController,
+  deleteDepartmentController,
 };

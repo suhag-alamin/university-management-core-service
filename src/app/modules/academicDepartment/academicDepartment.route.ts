@@ -16,17 +16,14 @@ router.post(
 router.get('/', AcademicDepartmentController.getAllDepartmentsController);
 router.get('/:id', AcademicDepartmentController.getSingleDepartmentController);
 
-// router.patch(
-//   '/update/:id',
-//   validateRequest(
-//     AcademicDepartmentValidation.updateAcademicDepartmentZodSchema
-//   ),
-//   AcademicDepartmentController.updateDepartmentController
-// );
+router.patch(
+  '/:id',
+  validateRequest(
+    AcademicDepartmentValidation.updateAcademicDepartmentZodSchema
+  ),
+  AcademicDepartmentController.updateDepartmentController
+);
 
-// router.delete(
-//   '/delete/:id',
-//   AcademicDepartmentController.deleteDepartmentController
-// );
+router.delete('/:id', AcademicDepartmentController.deleteDepartmentController);
 
 export const AcademicDepartmentRoutes = router;
