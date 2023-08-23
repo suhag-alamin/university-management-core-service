@@ -13,5 +13,26 @@ router.post(
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   BuildingController.createBuildingController
 );
+router.get(
+  '/',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  BuildingController.getBuildingsController
+);
+router.get(
+  '/:id',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  BuildingController.getSingleBuildingController
+);
+router.patch(
+  '/:id',
+  validateRequest(BuildingValidation.createBuildingZodSchema),
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  BuildingController.updateBuildingController
+);
+router.delete(
+  '/:id',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  BuildingController.deleteBuildingController
+);
 
 export const BuildingRoutes = router;
