@@ -29,27 +29,16 @@ const createStudentZodSchema = z.object({
       })
       .optional(),
 
-    academicDepartment: z.object({
-      connect: z.object({
-        id: z.string({
-          required_error: 'Academic Depart is required',
-        }),
-      }),
-    }),
-    academicSemester: z.object({
-      connect: z.object({
-        id: z.string({
-          required_error: 'Academic Semester is required',
-        }),
-      }),
+    academicDepartmentId: z.string({
+      required_error: 'Academic Depart is required',
     }),
 
-    academicFaculty: z.object({
-      connect: z.object({
-        id: z.string({
-          required_error: 'Academic Faculty is required',
-        }),
-      }),
+    academicSemesterId: z.string({
+      required_error: 'Academic Semester is required',
+    }),
+
+    academicFacultyId: z.string({
+      required_error: 'Academic Faculty is required',
     }),
 
     profileImage: z
@@ -73,28 +62,10 @@ const updateStudentZodSchema = z.object({
 
     bloodGroup: z.string().optional(),
 
-    academicDepartment: z
-      .object({
-        connect: z.object({
-          id: z.string({}),
-        }),
-      })
-      .optional(),
-    academicSemester: z
-      .object({
-        connect: z.object({
-          id: z.string(),
-        }),
-      })
-      .optional(),
+    academicDepartmentId: z.string({}).optional(),
+    academicSemesterId: z.string().optional(),
 
-    academicFaculty: z
-      .object({
-        connect: z.object({
-          id: z.string(),
-        }),
-      })
-      .optional(),
+    academicFacultyId: z.string().optional(),
 
     profileImage: z.string().optional(),
   }),

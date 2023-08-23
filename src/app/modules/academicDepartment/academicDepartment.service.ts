@@ -12,6 +12,9 @@ const createAcademicDepartment = async (
   console.log(data);
   const result = await prisma.academicDepartment.create({
     data,
+    include: {
+      academicFaculty: true,
+    },
   });
   return result;
 };
