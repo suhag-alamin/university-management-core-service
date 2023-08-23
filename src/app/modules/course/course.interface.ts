@@ -8,3 +8,9 @@ export type ICourse = {
   credits: number;
   preRequisiteCourses: IPreRequisiteCourse[];
 };
+
+export type ICourseFilters = {
+  searchTerm?: string;
+  title?: string;
+  code?: string;
+};

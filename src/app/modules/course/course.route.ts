@@ -14,26 +14,26 @@ router.post(
 
   CourseController.createCourseController
 );
-// router.get(
-//   '/',
-//   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-//   RoomController.getRoomsController
-// );
-// router.get(
-//   '/:id',
-//   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-//   RoomController.getSingleRoomController
-// );
-// router.patch(
-//   '/:id',
-//   validateRequest(CourseValidation.updateCourseZodSchema),
-//   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-//   RoomController.updateRoomController
-// );
-// router.delete(
-//   '/:id',
-//   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-//   RoomController.deleteRoomController
-// );
+router.get(
+  '/',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  CourseController.getCoursesController
+);
+router.get(
+  '/:id',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  CourseController.getSingleCourseController
+);
+router.patch(
+  '/:id',
+  validateRequest(CourseValidation.updateCourseZodSchema),
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  CourseController.updateCourseController
+);
+router.delete(
+  '/:id',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  CourseController.deleteCourseController
+);
 
 export const CourseRoutes = router;
