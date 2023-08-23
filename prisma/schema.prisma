@@ -53,7 +53,7 @@ model AcademicDepartment {
 
 model Student {
   id           String   @id @default(uuid())
-  studentId    String
+  studentId    String   @unique
   firstName    String
   lastName     String
   middle       String?
@@ -79,7 +79,7 @@ model Student {
 
 model Faculty {
   id           String   @id @default(uuid())
-  facultyId    String
+  facultyId    String   @unique
   firstName    String
   lastName     String
   middle       String?
@@ -99,4 +99,26 @@ model Faculty {
   academicFacultyId String
 
   @@map("faculties")
+}
+
+model Building {
+  id        String   @id @default(uuid())
+  title     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  rooms     Room[]
+
+  @@map("buildings")
+}
+
+model Room {
+  id         String   @id @default(uuid())
+  roomNumber String   @unique
+  floor      String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  building   Building @relation(fields: [buildingId], references: [id])
+  buildingId String
+
+  @@map("rooms")
 }
