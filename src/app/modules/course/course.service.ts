@@ -5,10 +5,15 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
+import { asyncForEach } from '../../../shared/utils';
 import { CourseSearchableFields } from './course.constant';
-import { ICourse, ICourseFilters } from './course.interface';
+import {
+  ICourse,
+  ICourseFilters,
+  IPreRequisiteCourse,
+} from './course.interface';
 
-const createCourse = async (data: ICourse): Promise<ICourse | any> => {
+const createCourse = async (data: ICourse): Promise<ICourse | null> => {
   const { preRequisiteCourses, ...courseData } = data;
 
   const newCourse = await prisma.$transaction(async transactionClient => {
@@ -21,14 +26,17 @@ const createCourse = async (data: ICourse): Promise<ICourse | any> => {
     }
 
     if (preRequisiteCourses && preRequisiteCourses.length > 0) {
-      for (let i = 0; i < preRequisiteCourses.length; i++) {
-        await transactionClient.courseToPrerequisite.create({
-          data: {
-            courseId: result.id,
-            preRequisiteId: preRequisiteCourses[i].courseId,
-          },
-        });
-      }
+      await asyncForEach(
+        preRequisiteCourses,
+        async (preRequisiteCourse: IPreRequisiteCourse) => {
+          await transactionClient.courseToPrerequisite.create({
+            data: {
+              courseId: result.id,
+              preRequisiteId: preRequisiteCourse.courseId,
+            },
+          });
+        }
+      );
     }
     return result;
   });
@@ -179,32 +187,38 @@ const updateCourse = async (
           coursePrerequisite.courseId && !coursePrerequisite.isDeleted
       );
 
-      for (let i = 0; i < deletePrerequisite.length; i++) {
-        await transactionClient.courseToPrerequisite.deleteMany({
-          where: {
-            AND: [
-              {
-                courseId: id,
-              },
-              {
-                preRequisiteId: deletePrerequisite[i].courseId,
-              },
-            ],
-          },
-        });
-      }
+      await asyncForEach(
+        deletePrerequisite,
+        async (deletePreCourse: IPreRequisiteCourse) => {
+          await transactionClient.courseToPrerequisite.deleteMany({
+            where: {
+              AND: [
+                {
+                  courseId: id,
+                },
+                {
+                  preRequisiteId: deletePreCourse.courseId,
+                },
+              ],
+            },
+          });
+        }
+      );
 
-      for (let i = 0; i < newPrerequisite.length; i++) {
-        await transactionClient.courseToPrerequisite.create({
-          data: {
-            courseId: id,
-            preRequisiteId: newPrerequisite[i].courseId,
-          },
-        });
-      }
+      await asyncForEach(
+        newPrerequisite,
+        async (newPreCourse: IPreRequisiteCourse) => {
+          await transactionClient.courseToPrerequisite.create({
+            data: {
+              courseId: id,
+              preRequisiteId: newPreCourse.courseId,
+            },
+          });
+        }
+      );
+
+      return result;
     }
-
-    return result;
   });
 
   const responseData = await prisma.course.findUnique({
