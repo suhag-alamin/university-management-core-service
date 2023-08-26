@@ -8,13 +8,6 @@ import { CourseValidation } from './course.validation';
 const router = express.Router();
 
 router.post(
-  '/:id/assign-faculties',
-  validateRequest(CourseValidation.createAssignFacultiesZodSchema),
-  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-  CourseController.assignFacultiesController
-);
-
-router.post(
   '/',
   validateRequest(CourseValidation.createCourseZodSchema),
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
@@ -42,6 +35,20 @@ router.delete(
   '/:id',
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   CourseController.deleteCourseController
+);
+
+// faculties
+
+router.post(
+  '/:id/assign-faculties',
+  validateRequest(CourseValidation.createAssignFacultiesZodSchema),
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  CourseController.assignFacultiesController
+);
+router.delete(
+  '/:id/remove-faculties',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  CourseController.removeFacultiesController
 );
 
 export const CourseRoutes = router;
