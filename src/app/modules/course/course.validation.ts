@@ -14,6 +14,7 @@ const createCourseZodSchema = z.object({
     preRequisiteCourses: z
       .object({
         courseId: z.string({}),
+        isDeleted: z.boolean().optional(),
       })
       .array()
       .optional(),
@@ -27,6 +28,7 @@ const updateCourseZodSchema = z.object({
     preRequisiteCourses: z
       .object({
         courseId: z.string({}),
+        isDeleted: z.boolean().optional(),
       })
       .array()
       .optional(),

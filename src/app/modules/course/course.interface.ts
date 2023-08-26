@@ -1,5 +1,6 @@
 type IPreRequisiteCourse = {
   courseId: string;
+  isDeleted?: null;
 };
 
 export type ICourse = {
