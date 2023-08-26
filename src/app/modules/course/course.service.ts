@@ -1,4 +1,4 @@
-import { Course, Prisma } from '@prisma/client';
+import { Course, CourseFaculty, Prisma } from '@prisma/client';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
@@ -13,7 +13,7 @@ import {
   IPreRequisiteCourse,
 } from './course.interface';
 
-const createCourse = async (data: ICourse): Promise<ICourse | null> => {
+const createCourse = async (data: ICourse): Promise<ICourse | any> => {
   const { preRequisiteCourses, ...courseData } = data;
 
   const newCourse = await prisma.$transaction(async transactionClient => {
@@ -271,10 +271,34 @@ const deleteCourse = async (id: string): Promise<Course | null> => {
   throw new ApiError(httpStatus.BAD_REQUEST, 'Unable to delete course');
 };
 
+const assignFaculties = async (
+  id: string,
+  data: string[]
+): Promise<CourseFaculty[]> => {
+  await prisma.courseFaculty.createMany({
+    data: data.map(facultyId => ({
+      courseId: id,
+      facultyId,
+    })),
+  });
+
+  const assignFacultiesData = await prisma.courseFaculty.findMany({
+    where: {
+      courseId: id,
+    },
+    include: {
+      course: true,
+      faculty: true,
+    },
+  });
+  return assignFacultiesData;
+};
+
 export const CourseService = {
   createCourse,
   getAllCourses,
   getSingleCourse,
   updateCourse,
   deleteCourse,
+  assignFaculties,
 };
