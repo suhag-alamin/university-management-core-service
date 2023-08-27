@@ -54,12 +54,13 @@ router.delete(
 
 router.post(
   '/:id/assign-courses',
-  validateRequest(FacultyValidation.createAssignCoursesZodSchema),
+  validateRequest(FacultyValidation.assignOrRemoveCoursesZodSchema),
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   FacultyController.assignCoursesController
 );
 router.delete(
   '/:id/remove-courses',
+  validateRequest(FacultyValidation.assignOrRemoveCoursesZodSchema),
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   FacultyController.removeCoursesController
 );
