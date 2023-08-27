@@ -6,7 +6,7 @@ import sendResponse from '../../../shared/sendResponse';
 import { facultyFilterableFields } from './facuty.constant';
 import { FacultyService } from './faculty.service';
 import { paginationFields } from '../../../constants/pagination';
-import { Faculty } from '@prisma/client';
+import { CourseFaculty, Faculty } from '@prisma/client';
 
 const createFacultyController = catchAsync(
   async (req: Request, res: Response) => {
@@ -86,10 +86,41 @@ const deleteFacultyController = catchAsync(
   }
 );
 
+const assignCoursesController = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+
+    const result = await FacultyService.assignCourses(id, req.body.courses);
+
+    sendResponse<CourseFaculty[]>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Assign Courses to faculties successfully',
+      data: result,
+    });
+  }
+);
+const removeCoursesController = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params.id;
+
+    const result = await FacultyService.removeCourses(id, req.body.courses);
+
+    sendResponse<CourseFaculty[]>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Deleted Courses from faculties successfully',
+      data: result,
+    });
+  }
+);
+
 export const FacultyController = {
   createFacultyController,
   getAllFacultiesController,
   getSingleFacultyController,
   updateFacultyController,
   deleteFacultyController,
+  assignCoursesController,
+  removeCoursesController,
 };
