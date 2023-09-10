@@ -123,9 +123,57 @@ const deleteSemesterRegistration = async (
   return result;
 };
 
+const updateSemesterRegistration = async (
+  id: string,
+  data: Partial<SemesterRegistration>
+): Promise<SemesterRegistration> => {
+  const isExist = await prisma.semesterRegistration.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Semester registration not found');
+  }
+
+  if (
+    data.status &&
+    isExist.status === SemesterRegistrationStatus.UPCOMING &&
+    data.status !== SemesterRegistrationStatus.ONGOING
+  ) {
+    throw new ApiError(
+      httpStatus.NOT_FOUND,
+      'Can only move from Upcoming to Ongoing'
+    );
+  } else if (
+    data.status &&
+    isExist.status === SemesterRegistrationStatus.ONGOING &&
+    data.status !== SemesterRegistrationStatus.ENDED
+  ) {
+    throw new ApiError(
+      httpStatus.NOT_FOUND,
+      'Can only move from Ongoing to Ended'
+    );
+  }
+
+  const result = await prisma.semesterRegistration.update({
+    where: {
+      id,
+    },
+    data,
+    include: {
+      academicSemester: true,
+    },
+  });
+
+  return result;
+};
+
 export const SemesterRegistrationService = {
   createSemesterRegistration,
   getSemesterRegistrations,
   getSingleSemesterRegistration,
   deleteSemesterRegistration,
+  updateSemesterRegistration,
 };
