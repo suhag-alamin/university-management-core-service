@@ -1,5 +1,3 @@
-export const status = ['UPCOMING', 'ONGOING', 'ENDED'];
-
 export const semesterRegistrationFilterableFields = [
   'searchTerm',
   'id',
