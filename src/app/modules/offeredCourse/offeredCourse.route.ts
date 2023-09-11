@@ -14,4 +14,4 @@ router.post(
   OfferedCourseController.createOfferedCourseController
 );
 
-export const OfferedCourseRouter = router;
+export const OfferedCourseRoutes = router;
