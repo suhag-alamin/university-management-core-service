@@ -13,7 +13,15 @@ const createOfferedCourseSectionZodSchema = z.object({
     }),
   }),
 });
+const updateOfferedCourseSectionZodSchema = z.object({
+  body: z.object({
+    title: z.string().optional(),
+    maxCapacity: z.number().optional(),
+    offeredCourseId: z.string().optional(),
+  }),
+});
 
 export const OfferedCourseSectionValidation = {
   createOfferedCourseSectionZodSchema,
+  updateOfferedCourseSectionZodSchema,
 };

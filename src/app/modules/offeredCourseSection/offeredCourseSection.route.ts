@@ -16,4 +16,40 @@ router.post(
   OfferedCourseSectionController.createOfferedCourseSectionController
 );
 
+router.get(
+  '/',
+  auth(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.FACULTY,
+    ENUM_USER_ROLE.STUDENT
+  ),
+  OfferedCourseSectionController.getAllOfferedCourseSectionController
+);
+router.get(
+  '/:id',
+  auth(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.FACULTY,
+    ENUM_USER_ROLE.STUDENT
+  ),
+  OfferedCourseSectionController.getSingleOfferedCourseSectionController
+);
+
+router.patch(
+  '/:id',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  validateRequest(
+    OfferedCourseSectionValidation.updateOfferedCourseSectionZodSchema
+  ),
+  OfferedCourseSectionController.updateOfferedCourseSectionController
+);
+
+router.delete(
+  '/:id',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  OfferedCourseSectionController.deleteOfferedCourseSectionController
+);
+
 export const OfferedCourseSectionRoutes = router;

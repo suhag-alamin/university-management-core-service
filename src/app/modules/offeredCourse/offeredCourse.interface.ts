@@ -3,3 +3,5 @@ export type ICreateOfferedCourse = {
   semesterRegistrationId: string;
   courseIds: string[];
 };
+
+export type IOfferedCourseFilters = { searchTerm?: string };
