@@ -7,5 +7,9 @@ router.post(
   '/',
   OfferedCourseClassScheduleController.createOfferedClassScheduleController
 );
+router.get(
+  '/',
+  OfferedCourseClassScheduleController.getAllOfferedCourseClassSchedulesController
+);
 
 export const OfferedCourseClassScheduleRoutes = router;
