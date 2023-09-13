@@ -94,7 +94,43 @@ const getAllOfferedCourseClassSchedules = async (
   };
 };
 
+const getSingleOfferedCourseClassSchedule = async (
+  id: string
+): Promise<OfferedCourseClassSchedule | null> => {
+  const result = await prisma.offeredCourseClassSchedule.findUnique({
+    where: {
+      id,
+    },
+  });
+  return result;
+};
+const updateOfferedCourseClassSchedule = async (
+  id: string,
+  payload: Partial<OfferedCourseClassSchedule>
+): Promise<OfferedCourseClassSchedule | null> => {
+  const result = await prisma.offeredCourseClassSchedule.update({
+    where: {
+      id,
+    },
+    data: payload,
+  });
+
+  return result;
+};
+const deleteOfferedCourseClassSchedule = async (
+  id: string
+): Promise<OfferedCourseClassSchedule | null> => {
+  const result = await prisma.offeredCourseClassSchedule.delete({
+    where: { id },
+  });
+
+  return result;
+};
+
 export const OfferedCourseClassScheduleService = {
   createOfferedCourseClassSchedule,
   getAllOfferedCourseClassSchedules,
+  getSingleOfferedCourseClassSchedule,
+  updateOfferedCourseClassSchedule,
+  deleteOfferedCourseClassSchedule,
 };
