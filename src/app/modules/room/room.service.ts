@@ -4,7 +4,11 @@ import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
 import { IRoomFilters } from './room.interface';
-import { RoomSearchableFields } from './room.constant';
+import {
+  RoomSearchableFields,
+  roomRelationalFields,
+  roomRelationalFieldsMapper,
+} from './room.constant';
 
 const createRoom = async (data: Room): Promise<Room> => {
   const result = await prisma.room.create({
@@ -35,11 +39,31 @@ const getAllRooms = async (
     });
   }
 
-  if (Object.keys(filtersData).length) {
+  // if (Object.keys(filtersData).length) {
+  //   andCondition.push({
+  //     AND: Object.entries(filtersData).map(([field, value]) => ({
+  //       [field]: value,
+  //     })),
+  //   });
+  // }
+
+  if (Object.keys(filtersData).length > 0) {
     andCondition.push({
-      AND: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: value,
-      })),
+      AND: Object.keys(filtersData).map(key => {
+        if (roomRelationalFields.includes(key)) {
+          return {
+            [roomRelationalFieldsMapper[key]]: {
+              id: (filtersData as any)[key],
+            },
+          };
+        } else {
+          return {
+            [key]: {
+              equals: (filtersData as any)[key],
+            },
+          };
+        }
+      }),
     });
   }
 

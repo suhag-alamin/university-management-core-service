@@ -3,7 +3,13 @@ export const semesterRegistrationFilterableFields = [
   'id',
   'academicSemesterId',
 ];
-export const semesterRegistrationSearchableFields = [
-  'id',
+export const semesterRegistrationSearchableFields = [];
+
+export const semesterRegistrationRelationalFields: string[] = [
   'academicSemesterId',
 ];
+export const semesterRegistrationRelationalFieldsMapper: {
+  [key: string]: string;
+} = {
+  academicSemesterId: 'academicSemester',
+};

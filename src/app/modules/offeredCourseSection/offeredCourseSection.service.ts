@@ -5,7 +5,11 @@ import prisma from '../../../shared/prisma';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { IOfferedCourseSectionFilters } from './offeredCourseSection.interface';
 import { IGenericResponse } from '../../../interfaces/common';
-import { offeredCourseSectionSearchableFields } from './offeredCourseSection.constant';
+import {
+  offeredCourseSectionRelationalFields,
+  offeredCourseSectionRelationalFieldsMapper,
+  offeredCourseSectionSearchableFields,
+} from './offeredCourseSection.constant';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 
 const createOfferedSectionCourse = async (
@@ -48,13 +52,33 @@ const getAllOfferedCourseSection = async (
     });
   }
 
-  if (Object.keys(filtersData).length) {
+  // if (Object.keys(filtersData).length) {
+  //   andCondition.push({
+  //     AND: Object.entries(filtersData).map(([field, value]) => ({
+  //       [field]: {
+  //         equals: value,
+  //       },
+  //     })),
+  //   });
+  // }
+
+  if (Object.keys(filtersData).length > 0) {
     andCondition.push({
-      AND: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: {
-          equals: value,
-        },
-      })),
+      AND: Object.keys(filtersData).map(key => {
+        if (offeredCourseSectionRelationalFields.includes(key)) {
+          return {
+            [offeredCourseSectionRelationalFieldsMapper[key]]: {
+              id: (filtersData as any)[key],
+            },
+          };
+        } else {
+          return {
+            [key]: {
+              equals: (filtersData as any)[key],
+            },
+          };
+        }
+      }),
     });
   }
 

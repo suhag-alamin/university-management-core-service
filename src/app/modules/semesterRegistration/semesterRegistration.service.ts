@@ -10,7 +10,11 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { semesterRegistrationSearchableFields } from './semesterRegistration.constant';
+import {
+  semesterRegistrationRelationalFields,
+  semesterRegistrationRelationalFieldsMapper,
+  semesterRegistrationSearchableFields,
+} from './semesterRegistration.constant';
 import { ISemesterRegistrationFilters } from './semesterRegistration.interface';
 
 const createSemesterRegistration = async (
@@ -62,11 +66,31 @@ const getSemesterRegistrations = async (
     });
   }
 
-  if (Object.keys(filtersData).length) {
+  // if (Object.keys(filtersData).length) {
+  //   andCondition.push({
+  //     AND: Object.entries(filtersData).map(([field, value]) => ({
+  //       [field]: value,
+  //     })),
+  //   });
+  // }
+
+  if (Object.keys(filtersData).length > 0) {
     andCondition.push({
-      AND: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: value,
-      })),
+      AND: Object.keys(filtersData).map(key => {
+        if (semesterRegistrationRelationalFields.includes(key)) {
+          return {
+            [semesterRegistrationRelationalFieldsMapper[key]]: {
+              id: (filtersData as any)[key],
+            },
+          };
+        } else {
+          return {
+            [key]: {
+              equals: (filtersData as any)[key],
+            },
+          };
+        }
+      }),
     });
   }
 

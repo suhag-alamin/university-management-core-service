@@ -2,7 +2,11 @@ import { AcademicDepartment, Prisma } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
-import { academicDepartmentSearchableFields } from './academicDepartment.constants';
+import {
+  academicDepartmentRelationalFields,
+  academicDepartmentRelationalFieldsMapper,
+  academicDepartmentSearchableFields,
+} from './academicDepartment.constants';
 import { IAcademicDepartmentFilters } from './academicDepartment.interface';
 import prisma from '../../../shared/prisma';
 
@@ -38,11 +42,31 @@ const getAllAcademicDepartments = async (
     });
   }
 
-  if (Object.keys(filtersData).length) {
+  // if (Object.keys(filtersData).length) {
+  //   andCondition.push({
+  //     AND: Object.entries(filtersData).map(([field, value]) => ({
+  //       [field]: value,
+  //     })),
+  //   });
+  // }
+
+  if (Object.keys(filtersData).length > 0) {
     andCondition.push({
-      AND: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: value,
-      })),
+      AND: Object.keys(filtersData).map(key => {
+        if (academicDepartmentRelationalFields.includes(key)) {
+          return {
+            [academicDepartmentRelationalFieldsMapper[key]]: {
+              id: (filtersData as any)[key],
+            },
+          };
+        } else {
+          return {
+            [key]: {
+              equals: (filtersData as any)[key],
+            },
+          };
+        }
+      }),
     });
   }
 

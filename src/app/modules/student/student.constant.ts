@@ -2,19 +2,34 @@ export const gender = ['male', 'female'];
 export const bloodGroup = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
 export const studentSearchableFields = [
-  'id',
+  'firstName',
+  'lastName',
+  'middleName',
   'email',
   'contactNo',
-  'name.firstName',
-  'name.middleName',
-  'name.lastName',
+  'studentId',
 ];
 
 export const studentFilterableFields = [
   'searchTerm',
-  'id',
+  'studentId',
   'email',
   'contactNo',
-  'emergencyContactNo',
+  'gender',
   'bloodGroup',
+  'gender',
+  'academicFacultyId',
+  'academicDepartmentId',
+  'academicSemesterId',
 ];
+
+export const studentRelationalFields: string[] = [
+  'academicFacultyId',
+  'academicDepartmentId',
+  'academicSemesterId',
+];
+export const studentRelationalFieldsMapper: { [key: string]: string } = {
+  academicFacultyId: 'academicFaculty',
+  academicDepartmentId: 'academicDepartment',
+  academicSemesterId: 'academicSemester',
+};

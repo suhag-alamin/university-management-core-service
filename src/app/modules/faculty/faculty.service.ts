@@ -5,7 +5,11 @@ import { IPaginationOptions } from '../../../interfaces/pagination';
 import { CourseFaculty, Faculty, Prisma } from '@prisma/client';
 import prisma from '../../../shared/prisma';
 import { IFacultyFilters } from './faculty.interface';
-import { facultySearchableFields } from './facuty.constant';
+import {
+  facultyRelationalFields,
+  facultyRelationalFieldsMapper,
+  facultySearchableFields,
+} from './facuty.constant';
 
 const createFaculty = async (data: Faculty): Promise<Faculty | null> => {
   const result = await prisma.faculty.create({
@@ -37,11 +41,31 @@ const getAllFaculties = async (
     });
   }
 
-  if (Object.keys(filtersData).length) {
+  // if (Object.keys(filtersData).length) {
+  //   andCondition.push({
+  //     AND: Object.entries(filtersData).map(([field, value]) => ({
+  //       [field]: value,
+  //     })),
+  //   });
+  // }
+
+  if (Object.keys(filtersData).length > 0) {
     andCondition.push({
-      AND: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: value,
-      })),
+      AND: Object.keys(filtersData).map(key => {
+        if (facultyRelationalFields.includes(key)) {
+          return {
+            [facultyRelationalFieldsMapper[key]]: {
+              id: (filtersData as any)[key],
+            },
+          };
+        } else {
+          return {
+            [key]: {
+              equals: (filtersData as any)[key],
+            },
+          };
+        }
+      }),
     });
   }
 

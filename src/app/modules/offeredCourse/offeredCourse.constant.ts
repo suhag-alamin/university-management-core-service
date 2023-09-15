@@ -1,10 +1,20 @@
-export const offeredCourseSearchableFields = [
-  'academicDepartmentId',
-  'semesterRegistrationId',
-];
+export const offeredCourseSearchableFields = [];
 
 export const offeredCourseFilterableFields = [
   'searchTerm',
-  'academicDepartmentId',
+  'id',
   'semesterRegistrationId',
+  'courseId',
+  'academicDepartmentId',
 ];
+
+export const offeredCourseRelationalFields: string[] = [
+  'semesterRegistrationId',
+  'courseId',
+  'academicDepartmentId',
+];
+export const offeredCourseRelationalFieldsMapper: { [key: string]: string } = {
+  semesterRegistrationId: 'semesterRegistration',
+  courseId: 'course',
+  academicDepartmentId: 'academicDepartment',
+};
