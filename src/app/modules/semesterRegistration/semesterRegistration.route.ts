@@ -77,7 +77,7 @@ router.post(
 );
 
 router.post(
-  '/:id/start-new-semester',
+  '/:semesterRegistrationId/start-new-semester',
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   SemesterRegistrationController.startNewSemesterController
 );

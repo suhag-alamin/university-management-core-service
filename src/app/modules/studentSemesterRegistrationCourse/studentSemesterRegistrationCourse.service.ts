@@ -193,13 +193,11 @@ const confirmStudentRegistration = async (userId: string) => {
       },
     });
 
-  if (!studentSemesterRegistration || !semesterRegistration) {
+  if (!studentSemesterRegistration) {
     throw new ApiError(
       httpStatus.BAD_REQUEST,
       !studentSemesterRegistration
         ? 'You did not have any registration'
-        : !semesterRegistration
-        ? 'No semester registration is ongoing now!'
         : 'Something went wrong!'
     );
   }
@@ -210,10 +208,11 @@ const confirmStudentRegistration = async (userId: string) => {
       `You are not enrolled in any course`
     );
   }
+
   if (
-    studentSemesterRegistration.totalCreditsTaken &&
-    semesterRegistration.minCredit &&
-    semesterRegistration.maxCredit &&
+    studentSemesterRegistration?.totalCreditsTaken &&
+    semesterRegistration?.minCredit &&
+    semesterRegistration?.maxCredit &&
     (studentSemesterRegistration.totalCreditsTaken <
       semesterRegistration.minCredit ||
       studentSemesterRegistration.totalCreditsTaken >
