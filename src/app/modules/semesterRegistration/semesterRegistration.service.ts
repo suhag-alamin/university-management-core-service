@@ -361,14 +361,14 @@ const startNewSemester = async (semesterRegistrationId: string) => {
           const totalSemesterPaymentAmount =
             studentSemReg.totalCreditsTaken * 5000;
 
-          // await StudentSemesterPaymentService.createSemesterPayment(
-          //   prismaTransactionClient,
-          //   {
-          //     studentId: studentSemReg.studentId,
-          //     academicSemesterId: semesterRegistration.academicSemesterId,
-          //     totalPaymentAmount: totalSemesterPaymentAmount,
-          //   }
-          // );
+          await StudentSemesterPaymentService.createSemesterPayment(
+            prismaTransactionClient,
+            {
+              studentId: studentSemReg.studentId,
+              academicSemesterId: semesterRegistration.academicSemesterId,
+              totalPaymentAmount: totalSemesterPaymentAmount,
+            }
+          );
         }
         const studentSemesterRegistrationCourses =
           await prismaTransactionClient.studentSemesterRegistrationCourse.findMany(
@@ -422,14 +422,14 @@ const startNewSemester = async (semesterRegistrationId: string) => {
                   data: enrolledCourseData,
                 });
 
-              // await StudentEnrolledCourseMarkService.createStudentEnrolledCourseDefaultMark(
-              //   prismaTransactionClient,
-              //   {
-              //     studentId: item.studentId,
-              //     studentEnrolledCourseId: studentEnrolledCourseData.id,
-              //     academicSemesterId: semesterRegistration.academicSemesterId,
-              //   }
-              // );
+              await StudentEnrolledCourseMarkService.createStudentEnrolledCourseDefaultMark(
+                prismaTransactionClient,
+                {
+                  studentId: item.studentId,
+                  studentEnrolledCourseId: studentEnrolledCourseData.id,
+                  academicSemesterId: semesterRegistration.academicSemesterId,
+                }
+              );
             }
           }
         );

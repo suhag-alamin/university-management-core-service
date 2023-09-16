@@ -30,8 +30,8 @@ const createSemesterPayment = async (
     const dataToInsert = {
       studentId: data.studentId,
       academicSemesterId: data.academicSemesterId,
-      fullPaymentAmount: data.totalPaymentAmount,
-      partialPaymentAmount: data.totalPaymentAmount * 0.5,
+      fullPayment: data.totalPaymentAmount,
+      partialPayment: data.totalPaymentAmount * 0.5,
       totalDueAmount: data.totalPaymentAmount,
       totalPaidAmount: 0,
     };
