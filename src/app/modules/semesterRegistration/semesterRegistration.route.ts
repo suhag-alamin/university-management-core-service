@@ -21,6 +21,13 @@ router.get(
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   SemesterRegistrationController.getSemesterRegistrationsController
 );
+// get student registration
+router.get(
+  '/get-student-registration',
+  auth(ENUM_USER_ROLE.STUDENT),
+  SemesterRegistrationController.getStudentRegistrationController
+);
+
 router.get(
   '/:id',
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
@@ -67,6 +74,12 @@ router.post(
   '/confirm-student-registration',
   auth(ENUM_USER_ROLE.STUDENT),
   SemesterRegistrationController.confirmStudentRegistrationController
+);
+
+router.post(
+  '/:id/start-new-semester',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  SemesterRegistrationController.startNewSemesterController
 );
 
 export const SemesterRegistrationRoutes = router;

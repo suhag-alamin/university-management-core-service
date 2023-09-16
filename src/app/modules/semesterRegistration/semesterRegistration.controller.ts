@@ -150,6 +150,34 @@ const confirmStudentRegistrationController = catchAsync(
     });
   }
 );
+const getStudentRegistrationController = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user;
+    const result = await SemesterRegistrationService.getStudentRegistration(
+      user?.id
+    );
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Successfully get student registration',
+      data: result,
+    });
+  }
+);
+const startNewSemesterController = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await SemesterRegistrationService.startNewSemester(id);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Semester started successfully',
+      data: result,
+    });
+  }
+);
 
 export const SemesterRegistrationController = {
   createSemesterRegistrationController,
@@ -161,4 +189,6 @@ export const SemesterRegistrationController = {
   enrollIntoCourseController,
   withdrawFromCourseController,
   confirmStudentRegistrationController,
+  getStudentRegistrationController,
+  startNewSemesterController,
 };
