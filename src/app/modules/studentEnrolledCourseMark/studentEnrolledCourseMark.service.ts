@@ -1,4 +1,8 @@
-import { ExamType, PrismaClient } from '@prisma/client';
+import {
+  ExamType,
+  PrismaClient,
+  StudentEnrolledCourseMark,
+} from '@prisma/client';
 import {
   DefaultArgs,
   PrismaClientOptions,
@@ -7,6 +11,10 @@ import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
 import prisma from '../../../shared/prisma';
 import { StudentEnrolledCourseMarkUtils } from './studentEnrolledCourseMark.utils';
+import { IStudentEnrolledCourseMarkFilterRequest } from './studentEnrolledCourseMark.interface';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import { IGenericResponse } from '../../../interfaces/common';
+import { paginationHelpers } from '../../../helpers/paginationHelper';
 
 const createStudentEnrolledCourseDefaultMark = async (
   transactionClient: Omit<
@@ -74,6 +82,46 @@ const createStudentEnrolledCourseDefaultMark = async (
   }
 };
 
+const getAllStudentMarks = async (
+  filters: IStudentEnrolledCourseMarkFilterRequest,
+  options: IPaginationOptions
+): Promise<IGenericResponse<StudentEnrolledCourseMark[]>> => {
+  const { limit, page } = paginationHelpers.calculatePagination(options);
+
+  const marks = await prisma.studentEnrolledCourseMark.findMany({
+    where: {
+      student: {
+        id: filters.studentId,
+      },
+      academicSemester: {
+        id: filters.academicSemesterId,
+      },
+      studentEnrolledCourse: {
+        course: {
+          id: filters.courseId,
+        },
+      },
+    },
+    include: {
+      studentEnrolledCourse: {
+        include: {
+          course: true,
+        },
+      },
+      student: true,
+    },
+  });
+
+  return {
+    meta: {
+      total: marks.length,
+      page,
+      limit,
+    },
+    data: marks,
+  };
+};
+
 const updateStudentMark = async (data: any) => {
   const { studentId, academicSemesterId, courseId, examType, marks } = data;
 
@@ -118,5 +166,6 @@ const updateStudentMark = async (data: any) => {
 
 export const StudentEnrolledCourseMarkService = {
   createStudentEnrolledCourseDefaultMark,
+  getAllStudentMarks,
   updateStudentMark,
 };
