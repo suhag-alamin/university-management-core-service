@@ -10,3 +10,9 @@ export type IFacultyFilters = {
   academicFaculty?: string;
   designation?: string;
 };
+
+export type IFacultyMyCourseStudentsRequest = {
+  academicSemesterId?: string | undefined;
+  courseId?: string | undefined;
+  offeredCourseSectionId?: string | undefined;
+};

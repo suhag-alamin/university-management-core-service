@@ -21,6 +21,17 @@ router.get(
 );
 
 router.get(
+  '/my-course-schedules',
+  auth(ENUM_USER_ROLE.STUDENT),
+  StudentController.getStudentCourseSchedulesController
+);
+router.get(
+  '/my-academic-info',
+  auth(ENUM_USER_ROLE.STUDENT),
+  StudentController.studentAcademicInfoController
+);
+
+router.get(
   '/:id',
   auth(
     ENUM_USER_ROLE.SUPER_ADMIN,

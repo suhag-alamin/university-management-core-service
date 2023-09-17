@@ -21,6 +21,12 @@ router.get(
 );
 
 router.get(
+  '/my-course-students',
+  auth(ENUM_USER_ROLE.FACULTY),
+  FacultyController.getFacultyCourseStudentsController
+);
+
+router.get(
   '/:id',
   auth(
     ENUM_USER_ROLE.SUPER_ADMIN,
