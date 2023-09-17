@@ -1,12 +1,12 @@
+import { CourseFaculty, Faculty } from '@prisma/client';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
+import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-import { facultyFilterableFields } from './facuty.constant';
 import { FacultyService } from './faculty.service';
-import { paginationFields } from '../../../constants/pagination';
-import { CourseFaculty, Faculty } from '@prisma/client';
+import { facultyFilterableFields } from './facuty.constant';
 
 const createFacultyController = catchAsync(
   async (req: Request, res: Response) => {
@@ -115,6 +115,20 @@ const removeCoursesController = catchAsync(
   }
 );
 
+const facultyCoursesController = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user;
+    const filter = pick(req.query, ['academicSemesterId', 'courseId']);
+    const result = await FacultyService.facultyCourses(user, filter);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Faculty courses data retrieved successfully!',
+      data: result,
+    });
+  }
+);
+
 export const FacultyController = {
   createFacultyController,
   getAllFacultiesController,
@@ -123,4 +137,5 @@ export const FacultyController = {
   deleteFacultyController,
   assignCoursesController,
   removeCoursesController,
+  facultyCoursesController,
 };
