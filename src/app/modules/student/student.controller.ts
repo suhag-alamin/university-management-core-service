@@ -86,10 +86,25 @@ const deleteStudentController = catchAsync(
   }
 );
 
+const studentCoursesController = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user;
+    const filter = pick(req.query, ['courseId', 'academicSemesterId']);
+    const result = await StudentService.studentCourses(user?.id, filter);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Student Courses data retrieved successfully',
+      data: result,
+    });
+  }
+);
+
 export const StudentController = {
   createStudentController,
   getAllStudentsController,
   getSingleStudentController,
   updateStudentController,
   deleteStudentController,
+  studentCoursesController,
 };

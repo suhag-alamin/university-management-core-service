@@ -144,10 +144,42 @@ const deleteStudent = async (id: string): Promise<Student | null> => {
   return result;
 };
 
+const studentCourses = async (
+  userId: string,
+  filter: {
+    courseId?: string;
+    academicSemesterId?: string;
+  }
+) => {
+  if (!filter.academicSemesterId) {
+    const currentSemester = await prisma.academicSemester.findFirst({
+      where: {
+        isCurrent: true,
+      },
+    });
+    filter.academicSemesterId = currentSemester?.id;
+  }
+
+  const result = await prisma.studentEnrolledCourse.findMany({
+    where: {
+      student: {
+        studentId: userId,
+      },
+      ...filter,
+    },
+    include: {
+      course: true,
+    },
+  });
+
+  return result;
+};
+
 export const StudentService = {
   createStudent,
   getAllStudents,
   getSingleStudent,
   updateStudent,
   deleteStudent,
+  studentCourses,
 };
