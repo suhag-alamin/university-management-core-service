@@ -7,6 +7,7 @@ import {
   academicSemesterSearchableFields,
   academicSemesterTitleCodeMapper,
   eventAcademicSemesterCreated,
+  eventAcademicSemesterDeleted,
   eventAcademicSemesterUpdated,
 } from './academicSemester.constant';
 import { IAcademicSemesterFilters } from './academicSemester.interface';
@@ -131,6 +132,13 @@ const deleteAcademicSemester = async (
   const result = await prisma.academicSemester.delete({
     where: { id },
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventAcademicSemesterDeleted,
+      JSON.stringify(result)
+    );
+  }
 
   return result;
 };

@@ -9,6 +9,8 @@ import {
   academicFacultySearchableFields,
   academicFacultyTitleMapper,
   eventAcademicFacultyCreated,
+  eventAcademicFacultyDeleted,
+  eventAcademicFacultyUpdated,
 } from './academicFaculty.constant';
 import { IAcademicFacultyFilters } from './academicFaculty.interface';
 import { RedisClient } from '../../../shared/redis';
@@ -110,6 +112,13 @@ const updateAcademicFaculty = async (
     data: payload,
   });
 
+  if (result) {
+    await RedisClient.publish(
+      eventAcademicFacultyUpdated,
+      JSON.stringify(result)
+    );
+  }
+
   return result;
 };
 
@@ -118,6 +127,12 @@ const deleteAcademicFaculty = async (id: string) => {
     where: { id },
   });
 
+  if (result) {
+    await RedisClient.publish(
+      eventAcademicFacultyDeleted,
+      JSON.stringify(result)
+    );
+  }
   return result;
 };
 

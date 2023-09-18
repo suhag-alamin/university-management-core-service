@@ -7,6 +7,8 @@ import {
   academicDepartmentRelationalFieldsMapper,
   academicDepartmentSearchableFields,
   eventAcademicDepartmentCreated,
+  eventAcademicDepartmentDeleted,
+  eventAcademicDepartmentUpdated,
 } from './academicDepartment.constants';
 import { IAcademicDepartmentFilters } from './academicDepartment.interface';
 import prisma from '../../../shared/prisma';
@@ -132,6 +134,13 @@ const updateAcademicDepartment = async (
     data: payload,
   });
 
+  if (result) {
+    await RedisClient.publish(
+      eventAcademicDepartmentUpdated,
+      JSON.stringify(result)
+    );
+  }
+
   return result;
 };
 
@@ -141,6 +150,13 @@ const deleteAcademicDepartment = async (
   const result = await prisma.academicDepartment.delete({
     where: { id },
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventAcademicDepartmentDeleted,
+      JSON.stringify(result)
+    );
+  }
 
   return result;
 };
