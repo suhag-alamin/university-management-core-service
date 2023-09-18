@@ -7,6 +7,7 @@ import {
   academicSemesterSearchableFields,
   academicSemesterTitleCodeMapper,
   eventAcademicSemesterCreated,
+  eventAcademicSemesterUpdated,
 } from './academicSemester.constant';
 import { IAcademicSemesterFilters } from './academicSemester.interface';
 import ApiError from '../../../errors/ApiError';
@@ -114,6 +115,13 @@ const updateAcademicSemester = async (
     },
     data: payload,
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventAcademicSemesterUpdated,
+      JSON.stringify(result)
+    );
+  }
 
   return result;
 };
