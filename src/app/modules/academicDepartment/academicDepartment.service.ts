@@ -6,9 +6,11 @@ import {
   academicDepartmentRelationalFields,
   academicDepartmentRelationalFieldsMapper,
   academicDepartmentSearchableFields,
+  eventAcademicDepartmentCreated,
 } from './academicDepartment.constants';
 import { IAcademicDepartmentFilters } from './academicDepartment.interface';
 import prisma from '../../../shared/prisma';
+import { RedisClient } from '../../../shared/redis';
 
 const createAcademicDepartment = async (
   data: AcademicDepartment
@@ -20,6 +22,13 @@ const createAcademicDepartment = async (
       academicFaculty: true,
     },
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventAcademicDepartmentCreated,
+      JSON.stringify(result)
+    );
+  }
   return result;
 };
 

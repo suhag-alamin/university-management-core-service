@@ -55,3 +55,4 @@ export const academicSemesterFilterableFields = [
   'startMonth',
   'endMonth',
 ];
+export const eventAcademicSemesterCreated = 'academic-semester.created';

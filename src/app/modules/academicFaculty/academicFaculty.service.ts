@@ -8,8 +8,10 @@ import prisma from '../../../shared/prisma';
 import {
   academicFacultySearchableFields,
   academicFacultyTitleMapper,
+  eventAcademicFacultyCreated,
 } from './academicFaculty.constant';
 import { IAcademicFacultyFilters } from './academicFaculty.interface';
+import { RedisClient } from '../../../shared/redis';
 
 const createAcademicFaculty = async (
   data: AcademicFaculty
@@ -18,6 +20,12 @@ const createAcademicFaculty = async (
     const result = await prisma.academicFaculty.create({
       data,
     });
+    if (result) {
+      await RedisClient.publish(
+        eventAcademicFacultyCreated,
+        JSON.stringify(result)
+      );
+    }
     return result;
   } else {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Faculty!');
