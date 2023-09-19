@@ -31,3 +31,5 @@ export const facultyRelationalFieldsMapper: { [key: string]: string } = {
 };
 
 export const eventFacultyCreated = 'faculty.created';
+export const eventFacultyUpdated = 'faculty.updated';
+export const eventFacultyDeleted = 'faculty.deleted';

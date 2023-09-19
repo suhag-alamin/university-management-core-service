@@ -378,6 +378,34 @@ const createFacultyFromEvent = async (e: any) => {
   };
   await createFaculty(facultyData as Faculty);
 };
+const updateFacultyFromEvent = async (e: any) => {
+  const facultyData: Partial<Faculty> = {
+    facultyId: e.id,
+    firstName: e.name.firstName,
+    middle: e.name.middleName,
+    lastName: e.name.lastName,
+    email: e.email,
+    contactNo: e.contactNo,
+    gender: e.gender,
+    bloodGroup: e.bloodGroup,
+    academicDepartmentId: e.academicDepartment.syncId,
+    academicFacultyId: e.academicFaculty.syncId,
+    designation: e.designation,
+  };
+  await prisma.faculty.update({
+    where: {
+      facultyId: e.id,
+    },
+    data: facultyData,
+  });
+};
+const deleteFacultyFromEvent = async (e: any) => {
+  await prisma.faculty.delete({
+    where: {
+      facultyId: e.id,
+    },
+  });
+};
 
 export const FacultyService = {
   createFaculty,
@@ -390,4 +418,6 @@ export const FacultyService = {
   facultyCourses,
   getFacultyCourseStudents,
   createFacultyFromEvent,
+  updateFacultyFromEvent,
+  deleteFacultyFromEvent,
 };

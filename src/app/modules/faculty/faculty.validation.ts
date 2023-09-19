@@ -50,22 +50,23 @@ const createFacultyZodSchema = z.object({
 
 const updateFacultyZodSchema = z.object({
   body: z.object({
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    middleName: z.string().optional(),
-
+    name: z
+      .object({
+        firstName: z.string().optional(),
+        lastName: z.string().optional(),
+        middleName: z.string().optional(),
+      })
+      .optional(),
+    dateOfBirth: z.string().optional(),
     gender: z.string().optional(),
-
+    bloodGroup: z.string().optional(),
     email: z.string().email().optional(),
     contactNo: z.string().optional(),
-
-    bloodGroup: z.string().optional().optional(),
-
-    academicDepartmentId: z.string().optional(),
-
-    academicFacultyId: z.string().optional(),
+    emergencyContactNo: z.string().optional(),
+    presentAddress: z.string().optional(),
+    permanentAddress: z.string().optional(),
+    department: z.string().optional(),
     designation: z.string().optional(),
-    profileImage: z.string().optional(),
   }),
 });
 
