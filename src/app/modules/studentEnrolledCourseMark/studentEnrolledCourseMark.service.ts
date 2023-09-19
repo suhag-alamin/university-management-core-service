@@ -9,14 +9,19 @@ import {
   PrismaClientOptions,
 } from '@prisma/client/runtime/library';
 import httpStatus from 'http-status';
-import ApiError from '../../../errors/ApiError';
-import prisma from '../../../shared/prisma';
-import { StudentEnrolledCourseMarkUtils } from './studentEnrolledCourseMark.utils';
-import { IStudentEnrolledCourseMarkFilterRequest } from './studentEnrolledCourseMark.interface';
-import { IPaginationOptions } from '../../../interfaces/pagination';
-import { IGenericResponse } from '../../../interfaces/common';
-import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { JwtPayload } from 'jsonwebtoken';
+import ApiError from '../../../errors/ApiError';
+import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { IGenericResponse } from '../../../interfaces/common';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import prisma from '../../../shared/prisma';
+import { RedisClient } from '../../../shared/redis';
+import {
+  eventStudentEnrolledCourseMarkFinalUpdated,
+  eventStudentEnrolledCourseMarkMidUpdated,
+} from './studentEnrolledCourseMark.constant';
+import { IStudentEnrolledCourseMarkFilterRequest } from './studentEnrolledCourseMark.interface';
+import { StudentEnrolledCourseMarkUtils } from './studentEnrolledCourseMark.utils';
 
 const createStudentEnrolledCourseDefaultMark = async (
   transactionClient: Omit<
@@ -163,6 +168,13 @@ const updateStudentMark = async (data: any) => {
     },
   });
 
+  if (result) {
+    await RedisClient.publish(
+      eventStudentEnrolledCourseMarkMidUpdated,
+      JSON.stringify(result)
+    );
+  }
+
   return updateStudentMarks;
 };
 
@@ -294,6 +306,13 @@ const updateFinalMarks = async (payload: any) => {
         cgpa: academicResult.cgpa,
       },
     });
+  }
+
+  if (grades) {
+    await RedisClient.publish(
+      eventStudentEnrolledCourseMarkFinalUpdated,
+      JSON.stringify(grades)
+    );
   }
 
   return grades;

@@ -12,6 +12,9 @@ import prisma from '../../../shared/prisma';
 import { asyncForEach } from '../../../shared/utils';
 import { OfferedCourseClassScheduleUtils } from '../offeredCourseClassSchedule/offeredCourseClassSchedule.utils';
 import {
+  eventOfferedCourseSectionCreated,
+  eventOfferedCourseSectionDeleted,
+  eventOfferedCourseSectionUpdated,
   offeredCourseSectionRelationalFields,
   offeredCourseSectionRelationalFieldsMapper,
   offeredCourseSectionSearchableFields,
@@ -21,6 +24,7 @@ import {
   ICreateOfferedCourseSection,
   IOfferedCourseSectionFilters,
 } from './offeredCourseSection.interface';
+import { RedisClient } from '../../../shared/redis';
 
 const createOfferedSectionCourse = async (
   payload: ICreateOfferedCourseSection
@@ -109,6 +113,13 @@ const createOfferedSectionCourse = async (
       },
     },
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventOfferedCourseSectionCreated,
+      JSON.stringify(result)
+    );
+  }
 
   return result;
 };
@@ -214,6 +225,13 @@ const updateOfferedCourseSection = async (
     data: payload,
   });
 
+  if (result) {
+    await RedisClient.publish(
+      eventOfferedCourseSectionUpdated,
+      JSON.stringify(result)
+    );
+  }
+
   return result;
 };
 const deleteOfferedCourseSection = async (
@@ -222,6 +240,13 @@ const deleteOfferedCourseSection = async (
   const result = await prisma.offeredCourseSection.delete({
     where: { id },
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventOfferedCourseSectionDeleted,
+      JSON.stringify(result)
+    );
+  }
 
   return result;
 };

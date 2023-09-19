@@ -6,9 +6,13 @@ import prisma from '../../../shared/prisma';
 import { IRoomFilters } from './room.interface';
 import {
   RoomSearchableFields,
+  eventRoomCreated,
+  eventRoomDeleted,
+  eventRoomUpdated,
   roomRelationalFields,
   roomRelationalFieldsMapper,
 } from './room.constant';
+import { RedisClient } from '../../../shared/redis';
 
 const createRoom = async (data: Room): Promise<Room> => {
   const result = await prisma.room.create({
@@ -17,6 +21,10 @@ const createRoom = async (data: Room): Promise<Room> => {
       building: true,
     },
   });
+
+  if (result) {
+    await RedisClient.publish(eventRoomCreated, JSON.stringify(result));
+  }
   return result;
 };
 
@@ -118,6 +126,10 @@ const updateRoom = async (
     },
     data,
   });
+
+  if (result) {
+    await RedisClient.publish(eventRoomUpdated, JSON.stringify(result));
+  }
   return result;
 };
 
@@ -127,6 +139,10 @@ const deleteRoom = async (id: string): Promise<Room | null> => {
       id,
     },
   });
+
+  if (result) {
+    await RedisClient.publish(eventRoomDeleted, JSON.stringify(result));
+  }
   return result;
 };
 

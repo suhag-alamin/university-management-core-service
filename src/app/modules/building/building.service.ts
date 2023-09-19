@@ -2,14 +2,23 @@ import { Building, Prisma } from '@prisma/client';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { buildingSearchableFields } from './building.constant';
+import {
+  buildingSearchableFields,
+  eventBuildingCreated,
+  eventBuildingDeleted,
+  eventBuildingUpdated,
+} from './building.constant';
 import { IBuildingFilters } from './building.interface';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { RedisClient } from '../../../shared/redis';
 
 const createBuilding = async (data: Building): Promise<Building> => {
   const result = await prisma.building.create({
     data,
   });
+  if (result) {
+    await RedisClient.publish(eventBuildingCreated, JSON.stringify(result));
+  }
   return result;
 };
 
@@ -91,6 +100,10 @@ const updateBuilding = async (
     },
     data,
   });
+
+  if (result) {
+    await RedisClient.publish(eventBuildingUpdated, JSON.stringify(result));
+  }
   return result;
 };
 
@@ -100,6 +113,9 @@ const deleteBuilding = async (id: string): Promise<Building | null> => {
       id,
     },
   });
+  if (result) {
+    await RedisClient.publish(eventBuildingDeleted, JSON.stringify(result));
+  }
   return result;
 };
 

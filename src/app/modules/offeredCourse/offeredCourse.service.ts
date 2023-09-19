@@ -8,11 +8,15 @@ import prisma from '../../../shared/prisma';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { IGenericResponse } from '../../../interfaces/common';
 import {
+  eventOfferedCourseCreated,
+  eventOfferedCourseDeleted,
+  eventOfferedCourseUpdated,
   offeredCourseRelationalFields,
   offeredCourseRelationalFieldsMapper,
   offeredCourseSearchableFields,
 } from './offeredCourse.constant';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { RedisClient } from '../../../shared/redis';
 
 const createOfferedCourse = async (
   data: ICreateOfferedCourse
@@ -38,6 +42,13 @@ const createOfferedCourse = async (
       result.push(insetOfferedCourse);
     }
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventOfferedCourseCreated,
+      JSON.stringify(result)
+    );
+  }
   return result;
 };
 
@@ -141,7 +152,12 @@ const updateOfferedCourse = async (
     },
     data: payload,
   });
-
+  if (result) {
+    await RedisClient.publish(
+      eventOfferedCourseUpdated,
+      JSON.stringify(result)
+    );
+  }
   return result;
 };
 const deleteOfferedCourse = async (
@@ -151,6 +167,12 @@ const deleteOfferedCourse = async (
     where: { id },
   });
 
+  if (result) {
+    await RedisClient.publish(
+      eventOfferedCourseDeleted,
+      JSON.stringify(result)
+    );
+  }
   return result;
 };
 

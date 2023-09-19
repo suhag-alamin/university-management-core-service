@@ -5,3 +5,7 @@ export const roomRelationalFields: string[] = ['buildingId'];
 export const roomRelationalFieldsMapper: { [key: string]: string } = {
   buildingId: 'building',
 };
+
+export const eventRoomCreated = 'room.created';
+export const eventRoomUpdated = 'room.updated';
+export const eventRoomDeleted = 'room.deleted';

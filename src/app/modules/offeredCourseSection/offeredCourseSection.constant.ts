@@ -17,3 +17,10 @@ export const offeredCourseSectionRelationalFieldsMapper: {
   offeredCourseId: 'offeredCourse',
   semesterRegistrationId: 'semesterRegistration',
 };
+
+export const eventOfferedCourseSectionCreated =
+  'offered-course-section.created';
+export const eventOfferedCourseSectionUpdated =
+  'offered-course-section.updated';
+export const eventOfferedCourseSectionDeleted =
+  'offered-course-section.deleted';

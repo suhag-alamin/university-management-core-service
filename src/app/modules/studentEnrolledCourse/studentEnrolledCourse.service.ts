@@ -10,11 +10,15 @@ import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
 import {
+  eventStudentEnrolledCourseCreated,
+  eventStudentEnrolledCourseDeleted,
+  eventStudentEnrolledCourseUpdated,
   studentEnrolledCourseRelationalFields,
   studentEnrolledCourseRelationalFieldsMapper,
   studentEnrolledCourseSearchableFields,
 } from './studentEnrolledCourse.constant';
 import { IStudentEnrolledCourseFilterRequest } from './studentEnrolledCourse.interface';
+import { RedisClient } from '../../../shared/redis';
 
 const createStudentEnrolledCourse = async (
   data: StudentEnrolledCourse
@@ -54,6 +58,13 @@ const createStudentEnrolledCourse = async (
       course: true,
     },
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventStudentEnrolledCourseCreated,
+      JSON.stringify(result)
+    );
+  }
 
   return result;
 };
@@ -174,6 +185,13 @@ const updateStudentEnrolledCourse = async (
       course: true,
     },
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventStudentEnrolledCourseUpdated,
+      JSON.stringify(result)
+    );
+  }
   return result;
 };
 
@@ -190,6 +208,13 @@ const deleteStudentEnrolledCourse = async (
       course: true,
     },
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventStudentEnrolledCourseDeleted,
+      JSON.stringify(result)
+    );
+  }
   return result;
 };
 

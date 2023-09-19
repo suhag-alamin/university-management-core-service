@@ -13,3 +13,7 @@ export const semesterRegistrationRelationalFieldsMapper: {
 } = {
   academicSemesterId: 'academicSemester',
 };
+
+export const eventSemesterRegistrationCreated = 'semester-registration.created';
+export const eventSemesterRegistrationUpdated = 'semester-registration.updated';
+export const eventSemesterRegistrationDeleted = 'semester-registration.deleted';

@@ -18,6 +18,9 @@ import { asyncForEach } from '../../../shared/utils';
 import { StudentSemesterPaymentService } from '../studentSemesterPayment/studentSemesterPayment.service';
 import { studentSemesterRegistrationCourseService } from '../studentSemesterRegistrationCourse/studentSemesterRegistrationCourse.service';
 import {
+  eventSemesterRegistrationCreated,
+  eventSemesterRegistrationDeleted,
+  eventSemesterRegistrationUpdated,
   semesterRegistrationRelationalFields,
   semesterRegistrationRelationalFieldsMapper,
   semesterRegistrationSearchableFields,
@@ -28,6 +31,7 @@ import {
 } from './semesterRegistration.interface';
 import { StudentEnrolledCourseMarkService } from '../studentEnrolledCourseMark/studentEnrolledCourseMark.service';
 import { SemesterRegistrationUtils } from './semesterRegistrationl.utils';
+import { RedisClient } from '../../../shared/redis';
 
 const createSemesterRegistration = async (
   data: SemesterRegistration
@@ -56,6 +60,14 @@ const createSemesterRegistration = async (
   const result = await prisma.semesterRegistration.create({
     data,
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventSemesterRegistrationCreated,
+      JSON.stringify(result)
+    );
+  }
+
   return result;
 };
 
@@ -157,6 +169,13 @@ const deleteSemesterRegistration = async (
       id,
     },
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventSemesterRegistrationDeleted,
+      JSON.stringify(result)
+    );
+  }
   return result;
 };
 
@@ -203,6 +222,13 @@ const updateSemesterRegistration = async (
       academicSemester: true,
     },
   });
+
+  if (result) {
+    await RedisClient.publish(
+      eventSemesterRegistrationUpdated,
+      JSON.stringify(result)
+    );
+  }
 
   return result;
 };

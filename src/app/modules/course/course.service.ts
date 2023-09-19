@@ -5,8 +5,14 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
+import { RedisClient } from '../../../shared/redis';
 import { asyncForEach } from '../../../shared/utils';
-import { CourseSearchableFields } from './course.constant';
+import {
+  CourseSearchableFields,
+  eventCourseCreated,
+  eventCourseDeleted,
+  eventCourseUpdated,
+} from './course.constant';
 import {
   ICourse,
   ICourseFilters,
@@ -37,6 +43,10 @@ const createCourse = async (data: ICourse): Promise<ICourse | any> => {
           });
         }
       );
+    }
+
+    if (result) {
+      await RedisClient.publish(eventCourseCreated, JSON.stringify(result));
     }
     return result;
   });
@@ -217,6 +227,10 @@ const updateCourse = async (
         }
       );
 
+      if (result) {
+        await RedisClient.publish(eventCourseUpdated, JSON.stringify(result));
+      }
+
       return result;
     }
   });
@@ -261,6 +275,10 @@ const deleteCourse = async (id: string): Promise<Course | null> => {
         id,
       },
     });
+
+    if (result) {
+      await RedisClient.publish(eventCourseDeleted, JSON.stringify(result));
+    }
     return result;
   });
 
