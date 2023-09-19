@@ -3,6 +3,7 @@ import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 
 import { CourseFaculty, Faculty, Prisma, Student } from '@prisma/client';
+import { JwtPayload } from 'jsonwebtoken';
 import prisma from '../../../shared/prisma';
 import {
   IFacultyFilters,
@@ -13,7 +14,6 @@ import {
   facultyRelationalFieldsMapper,
   facultySearchableFields,
 } from './facuty.constant';
-import { JwtPayload } from 'jsonwebtoken';
 
 const createFaculty = async (data: Faculty): Promise<Faculty | null> => {
   const result = await prisma.faculty.create({
@@ -362,6 +362,23 @@ const getFacultyCourseStudents = async (
   };
 };
 
+const createFacultyFromEvent = async (e: any) => {
+  const facultyData: Partial<Faculty> = {
+    facultyId: e.id,
+    firstName: e.name.firstName,
+    middle: e.name.middleName,
+    lastName: e.name.lastName,
+    email: e.email,
+    contactNo: e.contactNo,
+    gender: e.gender,
+    bloodGroup: e.bloodGroup,
+    academicDepartmentId: e.academicDepartment.syncId,
+    academicFacultyId: e.academicFaculty.syncId,
+    designation: e.designation,
+  };
+  await createFaculty(facultyData as Faculty);
+};
+
 export const FacultyService = {
   createFaculty,
   getAllFaculties,
@@ -372,4 +389,5 @@ export const FacultyService = {
   removeCourses,
   facultyCourses,
   getFacultyCourseStudents,
+  createFacultyFromEvent,
 };

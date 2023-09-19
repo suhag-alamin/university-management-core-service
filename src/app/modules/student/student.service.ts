@@ -291,6 +291,35 @@ const createStudentFromEvent = async (e: any) => {
   await createStudent(studentData as Student);
 };
 
+const updateStudentFromEvent = async (e: any): Promise<void> => {
+  const studentData: Partial<Student> = {
+    studentId: e.id,
+    firstName: e.name.firstName,
+    middle: e.name.middleName,
+    lastName: e.name.lastName,
+    email: e.email,
+    contactNo: e.contactNo,
+    gender: e.gender,
+    bloodGroup: e.bloodGroup,
+    academicDepartmentId: e.academicDepartment.syncId,
+    academicSemesterId: e.academicSemester.syncId,
+    academicFacultyId: e.academicFaculty.syncId,
+  };
+  await prisma.student.update({
+    where: {
+      studentId: e.id,
+    },
+    data: studentData,
+  });
+};
+const deleteStudentFromEvent = async (e: any): Promise<void> => {
+  await prisma.student.delete({
+    where: {
+      studentId: e.id,
+    },
+  });
+};
+
 export const StudentService = {
   createStudent,
   getAllStudents,
@@ -301,4 +330,6 @@ export const StudentService = {
   getStudentCourseSchedules,
   studentMyAcademicInfo,
   createStudentFromEvent,
+  updateStudentFromEvent,
+  deleteStudentFromEvent,
 };
