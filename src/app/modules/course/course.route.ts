@@ -45,7 +45,7 @@ router.post(
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   CourseController.assignFacultiesController
 );
-router.delete(
+router.patch(
   '/:id/remove-faculties',
   validateRequest(CourseValidation.assignOrRemoveFacultiesZodSchema),
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
