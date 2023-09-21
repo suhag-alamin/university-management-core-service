@@ -145,19 +145,19 @@ const deleteFaculty = async (id: string): Promise<Faculty | null> => {
 };
 
 const assignCourses = async (
-  id: string,
+  facultyId: string,
   data: string[]
 ): Promise<CourseFaculty[]> => {
   await prisma.courseFaculty.createMany({
     data: data.map(courseId => ({
-      facultyId: id,
+      facultyId: facultyId,
       courseId,
     })),
   });
 
   const assignCoursesData = await prisma.courseFaculty.findMany({
     where: {
-      facultyId: id,
+      facultyId: facultyId,
     },
     include: {
       faculty: true,
@@ -168,12 +168,12 @@ const assignCourses = async (
 };
 
 const removeCourses = async (
-  id: string,
+  facultyId: string,
   data: string[]
 ): Promise<CourseFaculty[] | null> => {
   await prisma.courseFaculty.deleteMany({
     where: {
-      facultyId: id,
+      facultyId: facultyId,
       courseId: {
         in: data,
       },
@@ -182,7 +182,7 @@ const removeCourses = async (
 
   const coursesData = await prisma.courseFaculty.findMany({
     where: {
-      facultyId: id,
+      facultyId: facultyId,
     },
     include: {
       course: true,

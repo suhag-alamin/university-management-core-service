@@ -88,9 +88,12 @@ const deleteFacultyController = catchAsync(
 
 const assignCoursesController = catchAsync(
   async (req: Request, res: Response) => {
-    const id = req.params.id;
+    const facultyId = req.params.facultyId;
 
-    const result = await FacultyService.assignCourses(id, req.body.courses);
+    const result = await FacultyService.assignCourses(
+      facultyId,
+      req.body.courses
+    );
 
     sendResponse<CourseFaculty[]>(res, {
       statusCode: httpStatus.OK,
