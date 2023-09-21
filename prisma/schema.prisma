@@ -172,7 +172,7 @@ model CourseFaculty {
   courseId  String
   course    Course  @relation(fields: [courseId], references: [id])
   facultyId String
-  faculty   Faculty @relation(fields: [facultyId], references: [id])
+  faculty   Faculty @relation(fields: [facultyId], references: [facultyId])
 
   @@id([courseId, facultyId])
   @@map("course_faculties")
